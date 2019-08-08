@@ -1,0 +1,36 @@
+version : '3' #[not support with current version of my docker]
+services: #[not support with current version of my docker]
+  web:
+    container_name: seksitha #[not support with current version of my docker]
+    build: . # build from Docker file
+    ports:
+      - "8000:80" 
+    links:
+      - db # comment here just link to db service define below
+    volumes:
+      - .:/code
+  db:
+    container_name: mysql # [not support with current version of my docker]
+    image: "mysql:5"
+    volumes:
+      # need to make file sharing in docker filesharing preference to get it to work.
+      - ./mysql:/etc/mysql/conf.d # working-directory : mysql server directory 
+    environment:
+      MYSQL_ROOT_PASSWORD: phpapptest
+      MYSQL_DATABASE: phpapp
+    ports:
+      - "3305:3306"
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    links:
+      - db # comment here just link to db service define below
+    environment:
+     - PMA_ARBITRARY=1
+    #  - PMA_USER and PMA_PASSWORD
+    restart: always
+    ports:
+     - 8001:80
+    volumes:
+     - /sessions
+
